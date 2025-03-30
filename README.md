@@ -14,8 +14,8 @@ This bot retrieves token addresses from Telegram channels and automatically perf
 
 ### **1️⃣ Clone the repository**
 ```sh
-git clone git@github.com:elnreth/my-solana-bot.git
-cd my-solana-bot
+git clone git@github.com:elnreth/telegram-raydium-bot.git
+cd telegram-raydium-bot
 ```
 
 ### **2️⃣ Install Solana CLI**
