@@ -22,6 +22,12 @@ class TelegramBot:
             token_address = match.group(1)
             print(f"Found token: {token_address}")
             tx_id = self.trader.execute_trade(token_address)
+            if not tx_id:
+                await self.send_notification("❌ Swap failed! An error occurred during the transaction.")
+                return
+            elif tx_id == "INSUFFICIENT_FUNDS":
+                await self.send_notification("⚠️ Insufficient SOL balance! Please top up your wallet to continue trading.")
+                return
             await self.send_notification(f"✅ Swap completed!\n\n🔹 Token: {token_address}\n🔹 Transaction: https://solscan.io/tx/{tx_id}")
 
     async def send_notification(self, message):

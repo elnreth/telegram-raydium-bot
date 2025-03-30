@@ -14,6 +14,10 @@ class SolanaTrader:
         self.client = Client(SOLANA_RPC_URL)
         self.wallet = Keypair.from_secret_key(bytes.fromhex(PRIVATE_KEY))
 
+    def get_balance(self):
+        balance_response = self.client.get_balance(self.wallet.pubkey())
+        return balance_response['result']['value'] / 1e9
+
     def get_best_pool(self, token_address):
         try:
             pools = fetch_json("https://api.raydium.io/pairs")
@@ -26,6 +30,12 @@ class SolanaTrader:
         return None
 
     def execute_trade(self, token_address):
+        print(f"Checking wallet token balance...")
+        current_balance = self.get_wallet_balance()
+        if current_balance < SOL_AMOUNT:
+            print(f"❌ Insufficient funds: {current_balance} SOL (Required: {SOL_AMOUNT} SOL)")
+            return "INSUFFICIENT_FUNDS"
+
         print(f"Searching for the best liquidity pool for {token_address}...")
         pool = self.get_best_pool(token_address)
         if not pool:
